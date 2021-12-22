@@ -1,0 +1,9 @@
+.form-container{
+    border-right: 2px solid #000;
+}
+.invalid{
+    border: 1px solid #ce0033 !important;
+}
+.erreurPrenom,.erreurNom{
+    display: none;
+}
