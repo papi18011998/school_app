@@ -1,9 +1,20 @@
-.form-container{
-    border-right: 2px solid #000;
-}
 .invalid{
     border: 1px solid #ce0033 !important;
 }
 .erreurPrenom,.erreurNom{
     display: none;
+}
+.containerImgPreview{
+    width: 300px;
+    height: 200px;
+    display: none;
+}
+#imgPreview{
+    display: none;
+    width: 100%;
+    height: auto;
+}
+.avatar{
+    width: 100px;
+    height: 100px;
 }

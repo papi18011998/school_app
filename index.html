@@ -14,7 +14,7 @@
     <header><h1 class="text-center">Bienvenue dans SCHOOL APP</h1></header>
     <main class="d-flex col-12 mt-5">
        
-            <section class="col-sm-12 col-md-6 col-lg-6 ps-5 pe-5 form-container">
+            <section class="col-sm-12 col-md-6 col-lg-6 ps-5 pe-5 ">
                 <!-- ===========================================Formulaire d'ajout d'apprenant=========================================== -->
                 <form>
                       <div class="col mb-5">
@@ -26,6 +26,15 @@
                         <input type="text" id="nom" class="form-control" placeholder="Nom*" >
                         <div class="erreurNom text-danger">Merci de saisir une information correcte</div>
                       </div>
+
+                      <div class="col mb-5">
+                        <label for="photo" class="form-label">Mettre votre photo</label>
+                        <input class="form-control form-control-lg" id="photo" type="file" accept="image/*">
+                        <div class="containerImgPreview p-3 mt-5">
+                          <img id="imgPreview" class="">
+                        </div>
+                      </div>
+
 
                       <select class="form-select mb-5" aria-label="Default select example" id="niveau">
                         <option value="Débutant">Débutant</option>
@@ -42,8 +51,8 @@
                       <div class="text-end"><input type="submit" class="btn btn-success" id="ajouter" value="Enregistrer"></div>
                   </form>
             </section>
-            <section class="col-sm-12 col-md-6 col-lg-6 row justify-content-center" id="liste-apprenant">
-              <h1 class="text-center text-decoration-underline">Apprenants</h1>
+            <section class="col-sm-12 col-md-6 col-lg-6  border" id="liste-apprenant">
+              <div class="text-end mt-5 d-none" id="save"><button class="btn btn-danger">Sauvegarder</button></div>
             </section>
       
     </main>

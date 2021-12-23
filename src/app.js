@@ -2,13 +2,6 @@
 const API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDE4OTQ2NiwiZXhwIjoxOTU1NzY1NDY2fQ.i4DceoJibTd6fEnsdgx8FnbC-qyRI1st6cylAwWVfa0"
 // RECCEUIL DES DONNEES UTILISATEURS
 const APPRENANTS =[]
-testApp = {
-    prenom:"Ramatoulaye",
-    nom:"DIOP",
-    niveau:"Intermediare",
-    bio:"Bonsoir c'est Ramatoulaye DIOP allias KEITA.J'ai 18 ans "
-}
-APPRENANTS.push(testApp)
 const prenomInput = document.querySelector("#prenom")
 const nomInput = document.querySelector("#nom")
 const niveauInput = document.querySelector("#niveau")
@@ -18,6 +11,10 @@ const ajouterBtn = document.querySelector("#ajouter")
 const erreurPrenom = document.querySelector(".erreurPrenom")
 const erreurNom = document.querySelector(".erreurNom")
 const liste = document.querySelector("#liste-apprenant")
+const photo = document.querySelector("#photo")
+const imgPreview = document.querySelector("#imgPreview")
+const containerImgPreview =document.querySelector(".containerImgPreview")
+const saveCollectionBtn =document.querySelector("#save")
 // CONTROLE SAISI DE LA BIO
 const progressionTextBio = document.querySelector(".text-progress")
 const LIMIT_SAISI = 130
@@ -42,6 +39,12 @@ bioInput.addEventListener("input",()=>{
     }
 
 })
+  photo.addEventListener("change",(e)=>{
+    let src = URL.createObjectURL(e.target.files[0])
+    containerImgPreview.style.display="block"
+    imgPreview.style.display="block"
+    imgPreview.src=src
+  })
 
 //VERIFICATON DES INFORMATIONS SAISIES
 formAdd.addEventListener('submit',(e)=>{
@@ -63,38 +66,49 @@ formAdd.addEventListener('submit',(e)=>{
         bioInput.classList.add("invalid")
         return
     }
+
     // CREATION DE L'OBJET APPRENANT
 
     let newApprenant ={
         prenom : prenomSaisi,
         nom : nomSaisi,
         niveau : niveauChoisi,
-        bio : bioSaisi 
+        bio : bioSaisi,
+        photo : imgPreview.src
     }
     APPRENANTS.push(newApprenant)
     console.log(APPRENANTS.length);
     createCard(newApprenant)
+    // VIDAGE DES input
+    prenomInput.value=""
+    nomInput.value =""
+    bioInput.value =""
+    imgPreview.src =""
+    imgPreview.style.display ='none'
+    containerImgPreview.style.display="none"
+    saveCollectionBtn.classList.remove("d-none")
+
 })
 // FONCTION DE CREATION DE CARTE DES APPRENANTS
 function createCard(apprenant) {
-liste.insertAdjacentHTML('beforeend',`
-    <div class="card mb-3 col-8" >
-  <div class="row no-gutters">
-    <div class="col-md-4">
-    <img src="../asset/star.svg" class="card-img" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h5 class="card-title">${apprenant.prenom} ${apprenant.nom}</h5>
-        <p class="card-text">${apprenant.bio} </p>
-        <p class="card-text"><small class="text-muted">${apprenant.niveau} </small></p>
-      </div>
+liste.insertAdjacentHTML('afterbegin',`
+<div class="card col-11 ps-5">
+<div class="row">
+  <div class="col-4 mt-4" style="width:100px;height:100px;">
+    <img src="${apprenant.photo}" class="avatar rounded-circle" alt="Avatar">
+  </div>
+  <div class="col-8">
+    <div class="card-body">
+      <h5 class="card-title">${apprenant.prenom} ${apprenant.nom}</h5>
+      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+      <p class="card-text"><small class="text-muted">${apprenant.niveau}</small></p>
     </div>
   </div>
 </div>
+</div>
     `) 
 }
-window.addEventListener("DOMContentLoaded",()=>{
-    APPRENANTS.forEach((apprenant)=>createCard(apprenant))
-})
+// window.addEventListener("DOMContentLoaded",()=>{
+//     APPRENANTS.forEach((apprenant)=>createCard(apprenant))
+// })
 
