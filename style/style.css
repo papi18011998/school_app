@@ -1,11 +1,11 @@
 .invalid{
     border: 1px solid #ce0033 !important;
 }
-.erreurPrenom,.erreurNom{
+.erreurPrenom,.erreurNom,.erreurMaquette,.erreurInterface,.erreurBdd,.erreurBackend{
     display: none;
 }
 .containerImgPreview{
-    width: 300px;
+    width: 200px;
     height: 200px;
     display: none;
 }
@@ -17,4 +17,17 @@
 .avatar{
     width: 100px;
     height: 100px;
+}
+input[type="number"]{
+    appearance: textfield;
+}
+.modifierIcon{
+    color: #198754;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.deleteIcon{
+    color: #ce0033;
+    font-size: 1.5rem;
+    cursor: pointer;
 }
