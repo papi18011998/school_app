@@ -142,7 +142,6 @@ let idBdd = "bdd"+apprenant.index
 let idBackend = "backend"+apprenant.index
 let modifierApprenant = "modifier"+apprenant.index
 let idModifierApprenantForm = "form"+apprenant.index
-let libelleNiveau = "niveau"+apprenant.index
 liste.insertAdjacentHTML('afterbegin',`
 <div class="card mb-2" id="${card}">
 <div class="row no-gutters">
@@ -151,7 +150,7 @@ liste.insertAdjacentHTML('afterbegin',`
           <i class="pe-3 bi bi-pen modifierIcon" id="${idUpdate}" title="Modifier"></i>
           <i class="pe-3 bi bi-trash deleteIcon" id="${idDelete}" title="Supprimer"></i>
         </div>
-        <img src="asset/landing_p4.jpg"  class="avatar" alt="Avatar">
+        <img src="${apprenant.photo}"  class="avatar" alt="Avatar">
     </div>
     <div class="col-md-7">
         <div class="card-body">
@@ -237,7 +236,6 @@ updateBtn.addEventListener("click",()=>{
             editInputBdd.removeAttribute('disabled')
             editInputBackend.removeAttribute('disabled')
             editInputPrenom.focus()
-          console.log(modifierApprenantForm);
             modifierApprenantForm.addEventListener('submit',(e)=>{
             e.preventDefault()
             if (editInputPrenom.value.trim().length == 0) {
@@ -282,7 +280,7 @@ updateBtn.addEventListener("click",()=>{
               backend: editInputBackend.value
             }
             // AFFECTATION  DU NOUVEL APPRENANT
-            apprenantItem =updateApprenant
+          apprenantItem = updateApprenant
           //  DESACTIVATION CHAMP
           editInputPrenom.setAttribute('disabled',true)
           editInputNom.setAttribute('disabled',true)
@@ -297,6 +295,20 @@ updateBtn.addEventListener("click",()=>{
         }
         
     })
+})
+deletBtn.addEventListener('click',()=>{
+  APPRENANTS.forEach((apprenantItem,i)=>{
+    if (idDelete.substring(7) == apprenantItem.index){
+      let confirmDelete = window.confirm("Etes vous sure de supprimer l'apprenant?")
+      if (confirmDelete == true) {
+        APPRENANTS.splice(i,1)
+        liste.removeChild(divCard)
+        console.log(APPRENANTS);
+      } else {
+        alert("Ok")
+      }
+    }
+  })
 })
 }
 
