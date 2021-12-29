@@ -24,7 +24,8 @@ const maquettageInput = document.querySelector("#maquettage")
 const interfaceInput = document.querySelector("#interface")
 const bddInput = document.querySelector("#bdd")
 const backendInput = document.querySelector("#backend")
-const saveCollectionBtn =document.querySelector("#save")    
+const saveCollectionContainer =document.querySelector("#saveBloc")    
+const saveBtn=document.querySelector("#save")    
 // CONTROLE SAISI DE LA BIO
 const progressionTextBio = document.querySelector(".text-progress")
 const LIMIT_SAISI = 130
@@ -119,6 +120,7 @@ formAdd.addEventListener('submit',(e)=>{
     }
     APPRENANTS.push(newApprenant)
     createCard(newApprenant)
+    saveCollectionContainer.classList.remove("d-none")
     // RESET INPUTS
     resetInputs()
 
@@ -216,6 +218,7 @@ const soumissionBtn = document.getElementById(modifierApprenant)
 editInputNiveau.value = apprenant.niveau
 soumissionBtn.style.display="none"
 updateBtn.addEventListener("click",()=>{
+    saveCollectionContainer.classList.add("d-none")
     APPRENANTS.forEach((apprenantItem)=>{
         if (idUpdate.substring(7) == apprenantItem.index) {
             soumissionBtn.style.display="block"
@@ -295,6 +298,7 @@ updateBtn.addEventListener("click",()=>{
         }
         
     })
+    saveCollectionContainer.classList.remove("d-none")
 })
 deletBtn.addEventListener('click',()=>{
   APPRENANTS.forEach((apprenantItem,i)=>{
@@ -303,7 +307,6 @@ deletBtn.addEventListener('click',()=>{
       if (confirmDelete == true) {
         APPRENANTS.splice(i,1)
         liste.removeChild(divCard)
-        console.log(APPRENANTS);
       } else {
         alert("Ok")
       }
@@ -313,8 +316,9 @@ deletBtn.addEventListener('click',()=>{
 }
 
 // AJOUT DES DONNES EN BASE
-saveCollectionBtn.addEventListener("click",()=>{
+saveBtn.addEventListener("click",()=>{
     APPRENANTS.forEach(apprenant=>{
+        delete apprenant.index
         fetch(API_URL,{
             method:"POST",
             headers:{
@@ -324,25 +328,12 @@ saveCollectionBtn.addEventListener("click",()=>{
             body:JSON.stringify(apprenant)
         })
     })
+    // RESET 
+    APPRENANTS.splice(0,APPRENANTS.length)
+    liste.innerHTML= ""
+    alert("Toutes les données ont été envoyé.\n Merci")
+    saveCollectionContainer.classList.add("d-none")
 })
-// MODIFICATION DU TABLEAU
-function modifier(carte,exApprenant) {
-    liste.removeChild(carte)            
-    let apprenantModifie ={
-        index: Date.now(),
-        prenom : prenomInput.value,
-        nom : nomInput.value,
-        niveau : niveauInput.value,
-        bio : bioInput.value,
-        photo : imgPreview.src,
-        maquettage : maquettageInput.value,
-        interface : interfaceInput.value,
-        bdd: bddInput.value,
-        backend: backendInput.value
-    }
-    exApprenant= apprenantModifie
-    createCard(exApprenant);
-}
 function resetInputs() {
     prenomInput.value=""
     nomInput.value =""
@@ -355,6 +346,6 @@ function resetInputs() {
     imgPreview.style.display ='none'
     containerImgPreview.style.display="none"
     // Activation du boutton de sauvegarde en base de donnees
-    saveCollectionBtn.classList.remove("d-none")
+    saveCollectionContainer.classList.remove("d-none")
 }
 
