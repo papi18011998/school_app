@@ -1,0 +1,75 @@
+<section class="col-sm-12 col-md-6 col-lg-6 ps-5 pe-5  pt-3" >
+    <form>
+     <div class="row">
+           <!--==================================CHAMP PRENOM==================================-->
+           <div class="col-sm-12 col-md-6 col-lg-6  mb-5">
+             <input type="text" id="prenom" class="form-control" placeholder="Prenom*" >
+             <div class="erreurPrenom text-danger">Merci de saisir une information correcte</div>
+           </div>
+           <!--==================================CHAMP NOM==================================-->
+           <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
+             <input type="text" id="nom" class="form-control" placeholder="Nom*" >
+             <div class="erreurNom text-danger">Merci de saisir une information correcte</div>
+           </div>
+     </div>
+     <div class="row">
+       <!--==================================CHAMP POUR LA PHOTO==================================-->
+         <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
+             <label for="photo" class="form-label">Photo</label>
+             <input class="form-control" id="photo" type="file" accept="image/*">
+             <div class="containerImgPreview p-3 mt-5">
+               <img id="imgPreview" class="">
+             </div>
+         </div>
+       <!--==================================CHAMP POUR LE NIVEAU==================================-->
+         <div class="col-sm-12 col-md-6 col-lg-6 mb-5">       
+             <label for="photo" class="form-label">Niveau</label>
+             <select class="form-select" aria-label="Default select example" id="niveau">
+               <option value="Débutant">Débutant</option>
+               <option value="Intermédiaire">Intermédiaire</option>
+               <option value="Expert">Expert</option>
+             </select>
+         </div>
+     </div>
+     <div class="row">
+       <!--==================================CHAMP MAQUETTE==================================-->
+         <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
+           <input type="number" id="maquettage" class="form-control" placeholder="Competence en maquettage/10" >
+           <div class="erreurMaquette text-danger">Merci de saisir un nombre en 0 et 10</div>
+         </div>
+       <!--==================================CHAMP INTERFACE==================================-->
+         <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
+           <input type="number" id="interface" class="form-control" placeholder="Competence en creation interface dynamique/10" >
+           <div class="erreurInterface text-danger">Merci de saisir un nombre en 0 et 10</div>
+         </div>
+     </div>
+     <div class="row">
+       <!--==================================CHAMP BASE DE DONNEES==================================-->
+         <div class="col-sm-12 col-md-6 col-lg-6  mb-5">
+           <input type="number" id="bdd" class="form-control" placeholder="Competence en creation de base de données/10" >
+           <div class="erreurBdd text-danger">Merci de saisir un nombre en 0 et 10</div>
+         </div>
+       <!--==================================CHAMP BACKEND==================================-->
+         <div class="col-sm-12 col-md-6 col-lg-6  mb-5">
+           <input type="number" id="backend" class="form-control" placeholder="Competence en backend/10" >
+           <div class="erreurBackend text-danger">Merci de saisir un nombre en 0 et 10</div>
+         </div>
+     </div>
+     <div class="row">
+       <!--==================================CHAMP BIOGRAPHIE==================================-->
+         <div class="form-group mb-2">
+           <label for="bio">Bio de l'apprenant</label>
+           <textarea class="form-control" id="bio" rows="3"></textarea>
+           <div class="text-end"><span class="text-progress">0</span>/130</div>
+         </div>
+         <!--==================================BOUTTON VALIDER==================================-->
+         <div class="text-end">
+           <input type="submit" class="btn btn-success mb-3" id="ajouter" value="Enregistrer">
+           <!-- <button id="modifier" class="btn btn-success d-none">Modifier</button> -->
+         </div>
+     </div>
+    </form>
+  </section>
+  <section class="col-sm-12 col-md-6 col-lg-6 ps-5 pe-5" id="liste-apprenant">
+   <div class="text-end mt-5 d-none" id="saveBloc"><button class="btn btn-danger me-5" id="save">Sauvegarder</button></div>
+  </section>
