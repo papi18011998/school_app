@@ -1,4 +1,3 @@
-import { onClickLink } from "./routing.js"
 const API_URL ="https://pmkxkvfhngudlbyvpasf.supabase.co/rest/v1/apprenants"
 const API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDE4OTQ2NiwiZXhwIjoxOTU1NzY1NDY2fQ.i4DceoJibTd6fEnsdgx8FnbC-qyRI1st6cylAwWVfa0"
 const APPRENANTS =[]
@@ -11,6 +10,9 @@ let containerImgPreview =""
 let bioInput =""
 let progressionTextBio =""
 let ajouterBtn = ""
+/**
+ * Cette fonction permet d'afficher le formulaire d'ajout d'apprenant
+ */
 export function displayForm(){
     document.querySelector("main").insertAdjacentHTML("beforeend",`
     <section class="col-sm-12 col-md-6 col-lg-6 ps-5 pe-5  pt-3 "  id="sectionForm">
@@ -107,14 +109,22 @@ export function displayForm(){
   })
   
 }
+/**
+ * Cette fonction permet de faire un prview de l'image uploadé
+ * @param {Event} e 
+ */
 function onChangeImage(e){
    let src = URL.createObjectURL(e.target.files[0])
     containerImgPreview.style.display="block"
     imgPreview.style.display="block"
     imgPreview.src=src
 }
-// CONTROLE SAISI DE LA BIO
-// VERIFICATION DU NOMBRE DE LETTRES SAISIES DANS LA BIO
+/**
+ * Permet de controler le nombre de lettre saisi dans la bio
+ * @param {HTMLElement} container 
+ * @param {Input} inputField 
+ * @param {button} btn 
+ */
 function controlLength(container,inputField,btn){
     let totalLettreSaisi = inputField.value.length
     let reste = LIMIT_SAISI - totalLettreSaisi
@@ -134,7 +144,11 @@ function controlLength(container,inputField,btn){
 
     }
 }
-
+/**
+ * Cette fonction permet d'ajouter un apprenant das le tableau
+ * @param {Event} e 
+ * @returns 
+ */
 function onSubmitForm(e){
   e.preventDefault()
   const prenomInput = document.querySelector("#prenom")
@@ -216,6 +230,10 @@ function onSubmitForm(e){
      resetInputs(prenomInput,nomInput,bioInput,bddInput,backendInput,interfaceInput,maquettageInput,imgPreview,containerImgPreview)
 
 }
+/**
+ * Cette fonction permet d'afficher un apprenant sur une carte editable
+ * @param {ApprenantType} apprenant 
+ */
 function UpdatableCardApprenant(apprenant) {
 let idUpdate = "update-"+apprenant.index
 let idDelete = "delete-"+apprenant.index
@@ -400,7 +418,18 @@ deletBtn.addEventListener('click',()=>{
   })
 })
 }
-// fonction de reset des inputs
+/**
+ * fonction de reset des inputs
+ * @param {Input} prenomParam 
+ * @param {Input} nomParam 
+ * @param {Input} bioParam 
+ * @param {Input} bddParam 
+ * @param {Input} backendParam 
+ * @param {Input} interfaceParam 
+ * @param {Input} maquettageParam 
+ * @param {Input} imgParam 
+ * @param {Input} imgContainerParam 
+ */
 function resetInputs(prenomParam,nomParam,bioParam,bddParam,backendParam,interfaceParam,maquettageParam,imgParam,imgContainerParam) {
     prenomParam.value=""
     nomParam.value =""
@@ -415,26 +444,9 @@ function resetInputs(prenomParam,nomParam,bioParam,bddParam,backendParam,interfa
     // Activation du boutton de sauvegarde en base de donnees
     saveCollectionContainer.classList.remove("d-none")
 }
-// // AJOUT DES DONNES EN BASE
-// saveBtn.addEventListener("click",()=>{
-    
-//     // APPRENANTS.forEach(apprenant=>{
-//     //     delete apprenant.index
-//     //     fetch(API_URL,{
-//     //         method:"POST",
-//     //         headers:{
-//     //             apiKey:API_KEY,
-//     //             "Content-Type": "application/json"
-//     //         },
-//     //         body:JSON.stringify(apprenant)
-//     //     })
-//     // })
-//     // // RESET 
-//     // APPRENANTS.splice(0,APPRENANTS.length)
-//     // liste.innerHTML= ""
-//     // alert("Toutes les données ont été envoyé.\n Merci")
-//     // saveCollectionContainer.classList.add("d-none")
-// })
+/**
+ * AJOUT DES DONNES EN BASE
+ */
 function addApprenantInDB(){
       APPRENANTS.forEach(apprenant=>{
         delete apprenant.index
@@ -453,6 +465,9 @@ function addApprenantInDB(){
     saveCollectionContainer.classList.add("d-none")
     window.location.href = "liste"
 }
+/**
+ * Permet d'avoir tous les apprenants
+ */
 export function findAll(){
   fetch(API_URL,{
     headers:{
@@ -467,11 +482,15 @@ export function findAll(){
     })
   })
 }
+/**
+ * Represente un apprenant das le DOM
+ * @param {ApprenantType} apprenant 
+ */
 function listApprenantUI(apprenant){
   let mainContain = document.querySelector("main")
   mainContain.classList.add("d-flex")
   mainContain.insertAdjacentHTML('beforeend',`
-  <div class="card col-lg-3 col-md-4 col-sm-12 ">
+  <div class="card m-3 col-lg-3 col-md-4 col-sm-12">
    <div class="row no-gutters">
       <div class="col-sm-5 ps-0">
          <img class="card-img" src="../asset/man.jpg" alt="Avatar Apprenant">
@@ -487,6 +506,10 @@ function listApprenantUI(apprenant){
 </div>`)
 
 }
+/**
+ * Affiche un apprenanr specifique
+ * @param {Integer} id 
+ */
 export function findApprenantById(id) {
   fetch(`${API_URL}?id=eq.${id}`,{
     headers:{
@@ -499,6 +522,10 @@ export function findApprenantById(id) {
     detailsOfApprenant(apprenant[0])
   })
 }
+/**
+ * Donne le detais sur un apprenant
+ * @param {ApprenantType} apprenant 
+ */
 function detailsOfApprenant(apprenant) {
   let mainContain = document.querySelector("main")
   mainContain.classList.add("d-flex")
@@ -528,10 +555,10 @@ function detailsOfApprenant(apprenant) {
 
   <div class="d-flex justify-content-between">
     <i class="pe-3 bi bi-pen modifierIcon" data-bs-toggle="modal" data-bs-target="#mymodal" title="Modifier"></i>
-    <i class="pe-3 bi bi-trash deleteIcon" title="Supprimer"></i>
+    <i class="pe-3 bi bi-trash deleteIcon" id="deleteIcon" title="Supprimer"></i>
   </div>
   <!--==================================MODAL==================================-->
-  <div class="modal" id="mymodal">
+  <div class="modal fade" id="mymodal">
   <div class="modal-dialog">
       <div class="modal-content">
           <div class="modal-header bg-danger">
@@ -608,7 +635,9 @@ function detailsOfApprenant(apprenant) {
   document.querySelector("form").addEventListener("submit",()=>{
     updateInDB(apprenant.id)
   })
-
+  document.querySelector("#deleteIcon").addEventListener('click',()=>{
+    deleteInDB(apprenant.id)
+  })
   let prenom = document.querySelector("#prenom")
   let nom = document.querySelector("#nom")
   let updateBio = document.querySelector("#updateBio")
@@ -623,6 +652,10 @@ function detailsOfApprenant(apprenant) {
     controlLength(updateProgressionTextBio,updateBio,updateBtn)
   })
 }
+/**
+ * Cette fonction permet de modifier un apprenant
+ * @param {Integer} id 
+ */
 function updateInDB(id) {
   event.preventDefault()
   let valeurInterface = document.querySelector("#interface")
@@ -647,6 +680,31 @@ function updateInDB(id) {
   })
   .then((response)=>{document.location.href=`${id}`})
 }
+/**
+ * Cette fonction permet de supprimer un apprenant
+ * @param {Integer} id 
+ */
+function deleteInDB(id) {
+  let confirmDelete = window.confirm("Voulez-vous vraiment supprimer cet apprenant?")
+  if (confirmDelete==true) {
+    fetch(`${API_URL}?id=eq.${id}`,{
+      method:"DELETE",
+      headers:{
+        apikey:API_KEY,
+        Prefer: "return=representation"
+      },
+    })
+    .then(response=>{document.location.href="liste"})
+  }else{
+    alert("Merci d'avoir changé d'avis !!!")
+  }
+}
+/**
+ * Cette fontion permet de convertir une valeur absolues en relative
+ * @param {Integer} valeur 
+ * @param {Integer} total 
+ * @returns 
+ */
 function convertToPercentage(valeur,total){
   return (valeur*100)/total
 }
