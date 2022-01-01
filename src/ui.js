@@ -3,7 +3,7 @@ const API_URL ="https://pmkxkvfhngudlbyvpasf.supabase.co/rest/v1/apprenants"
 const API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MDE4OTQ2NiwiZXhwIjoxOTU1NzY1NDY2fQ.i4DceoJibTd6fEnsdgx8FnbC-qyRI1st6cylAwWVfa0"
 const APPRENANTS =[]
 const LIMIT_SAISI =130
-let liste =""
+let liste =  ""
 let saveCollectionContainer=""
 let saveBtn=""
 let imgPreview =""
@@ -91,8 +91,7 @@ export function displayForm(){
   document.querySelector("form").addEventListener("submit", onSubmitForm);
   document.querySelector("#photo").addEventListener("change",onChangeImage)
 
-  bioInput = document.querySelector("#bio")
-  bioInput.addEventListener("input",controlLength)
+
 
   progressionTextBio = document.querySelector(".text-progress")
   saveCollectionContainer =document.querySelector("#saveBloc") 
@@ -101,9 +100,13 @@ export function displayForm(){
   saveBtn.addEventListener('click',addApprenantInDB)
   imgPreview = document.querySelector("#imgPreview")
   containerImgPreview = document.querySelector(".containerImgPreview")
-  liste = document.querySelectorAll("#liste-apprenant")
+  liste = document.querySelector("#liste-apprenant")
+  bioInput = document.querySelector("#bio")
+  bioInput.addEventListener("input",()=>{
+    controlLength(progressionTextBio,bioInput,ajouterBtn)
+  })
+  
 }
-
 function onChangeImage(e){
    let src = URL.createObjectURL(e.target.files[0])
     containerImgPreview.style.display="block"
@@ -112,22 +115,22 @@ function onChangeImage(e){
 }
 // CONTROLE SAISI DE LA BIO
 // VERIFICATION DU NOMBRE DE LETTRES SAISIES DANS LA BIO
-function controlLength(){
-    let totalLettreSaisi = bioInput.value.length
+function controlLength(container,inputField,btn){
+    let totalLettreSaisi = inputField.value.length
     let reste = LIMIT_SAISI - totalLettreSaisi
-    progressionTextBio.textContent =totalLettreSaisi
+    container.textContent =totalLettreSaisi
     if (totalLettreSaisi <= LIMIT_SAISI) {
-        progressionTextBio.parentNode.style.color ="black" 
-        bioInput.classList.remove("invalid")
-        ajouterBtn.disabled = false
+        container.parentNode.style.color ="black" 
+        inputField.classList.remove("invalid")
+        btn.disabled = false
     }
     else if (reste>=0 && reste<=15) {
-        progressionTextBio.parentNode.style.color ="green"
+        container.parentNode.style.color ="green"
     }
     else if(reste<0){
-        progressionTextBio.parentNode.style.color ="#ce0033"
-        bioInput.classList.add("invalid")
-        ajouterBtn.disabled = true 
+        container.parentNode.style.color ="#ce0033"
+        inputField.classList.add("invalid")
+        btn.disabled = true 
 
     }
 }
@@ -447,11 +450,10 @@ function addApprenantInDB(){
     // RESET 
     APPRENANTS.splice(0,APPRENANTS.length)
     liste.innerHTML= ""
-    alert("Toutes les données ont été envoyé.\n Merci")
     saveCollectionContainer.classList.add("d-none")
     window.location.href = "liste"
 }
-export function getAllApprenant(){
+export function findAll(){
   fetch(API_URL,{
     headers:{
       apikey:API_KEY,
@@ -461,18 +463,18 @@ export function getAllApprenant(){
   .then(response=>response.json())
   .then((apprenants)=>{
     apprenants.forEach((apprenant)=>{
-      cardApprennantWithDetails(apprenant)
+      listApprenantUI(apprenant)
     })
   })
 }
-function cardApprennantWithDetails(apprenant){
+function listApprenantUI(apprenant){
   let mainContain = document.querySelector("main")
-  mainContain.classList.add("d-flex","border")
+  mainContain.classList.add("d-flex")
   mainContain.insertAdjacentHTML('beforeend',`
-  <div class="card col-lg-3 col-md-4 col-sm-12 gutters">
-   <div class="row ">
-      <div class="col-sm-5">
-         <img class="card-img" src="../asset/star.svg" alt="Suresh Dasari Card">
+  <div class="card col-lg-3 col-md-4 col-sm-12 ">
+   <div class="row no-gutters">
+      <div class="col-sm-5 ps-0">
+         <img class="card-img" src="../asset/man.jpg" alt="Avatar Apprenant">
       </div>
       <div class="col-sm-7">
          <div class="card-body">
@@ -493,5 +495,158 @@ export function findApprenantById(id) {
     }
   })
   .then(response=>response.json())
-  .then(apprenant=>{console.log(apprenant);})
+  .then(apprenant=>{
+    detailsOfApprenant(apprenant[0])
+  })
+}
+function detailsOfApprenant(apprenant) {
+  let mainContain = document.querySelector("main")
+  mainContain.classList.add("d-flex")
+  console.log(mainContain);
+  let poucentageMaquette = convertToPercentage(apprenant.maquettage,10)
+  let poucentageInterface = convertToPercentage(apprenant.interface,10)
+  let poucentageBdd = convertToPercentage(apprenant.bdd,10)
+  let poucentageBackend = convertToPercentage(apprenant.backend,10)
+  mainContain.insertAdjacentHTML("beforeend",`
+  <section class="col-sm-12 col-md-6 col-lg-6 ps-5 pe-5 pt-3">
+   <img class="card-img" src="../asset/man.jpg" alt="Avatar Apprenant" height="300" >
+  </section>
+  <section class="col-sm-12 col-md-6 col-lg-6 ps-5 pe-5" id="liste-apprenant">
+  <div class="h3">${apprenant.prenom} ${apprenant.nom}</div>
+  <div>${apprenant.bio}</div>
+  <label for="file" class="mt-3">Compétence en maquettage: ${poucentageMaquette}%</label>
+  <progress id="file" value="${poucentageMaquette}" max="100" class="w-100"></progress>
+
+  <label for="file" class="mt-3">Compétence en conception d'interface: ${poucentageInterface}%</label>
+  <progress id="file" value="${poucentageInterface}" max="100" class="w-100"></progress>
+
+  <label for="file" class="mt-3">Compétence en mise en place de la partie backend: ${poucentageBackend}%</label>
+  <progress id="file" value="${poucentageBackend}" max="100" class="w-100"></progress>
+
+  <label for="file" class="mt-3">Compétence en Conception de base de données: ${poucentageBdd}%</label>
+  <progress id="file" value="${poucentageBdd}" max="100" class="w-100"></progress>
+
+  <div class="d-flex justify-content-between">
+    <i class="pe-3 bi bi-pen modifierIcon" data-bs-toggle="modal" data-bs-target="#mymodal" title="Modifier"></i>
+    <i class="pe-3 bi bi-trash deleteIcon" title="Supprimer"></i>
+  </div>
+  <!--==================================MODAL==================================-->
+  <div class="modal" id="mymodal">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header bg-danger">
+              <h5 class="modal-title">Modifier l'apprenant</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+              <form>
+                  <div class="row">
+                        <!--==================================CHAMP PRENOM==================================-->
+                        <div class="col-sm-12 col-md-6 col-lg-6  mb-5">
+                          <input type="text" id="prenom" class="form-control" placeholder="Prenom*" value="${apprenant.prenom}">
+                        </div>
+                        <!--==================================CHAMP NOM==================================-->
+                        <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
+                          <input type="text" id="nom" class="form-control" placeholder="Nom*" value="${apprenant.nom}">
+                        </div>
+                  </div>
+                  <div class="row">
+                    <!--==================================CHAMP POUR LE NIVEAU==================================-->
+                      <div class="col-sm-12 col-md-12 col-lg-12 mb-5">       
+                          <label for="photo" class="form-label">Niveau</label>
+                          <select class="form-select" aria-label="Default select example" id="niveau">
+                            <option value="Débutant">Débutant</option>
+                            <option value="Intermédiaire">Intermédiaire</option>
+                            <option value="Expert">Expert</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="row">
+                    <!--==================================CHAMP MAQUETTE==================================-->
+                      <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
+                        <label for="maquettage" class="form-label">Maquettage</label>
+                        <input type="number" id="maquettage" class="form-control" placeholder="Competence en maquettage/10" value="${apprenant.maquettage}">
+                      </div>
+                    <!--==================================CHAMP INTERFACE==================================-->
+                      <div class="col-sm-12 col-md-6 col-lg-6 mb-5">
+                        <label for="interface" class="form-label">Interface</label>
+                        <input type="number" id="interface" class="form-control" placeholder="Competence en creation interface dynamique/10" value="${apprenant.interface}">
+                      </div>
+                  </div>
+                  <div class="row">
+                    <!--==================================CHAMP BASE DE DONNEES==================================-->
+                      <div class="col-sm-12 col-md-6 col-lg-6  mb-5">
+                        <label for="bdd" class="form-label">Base de données</label>
+                        <input type="number" id="bdd" class="form-control" placeholder="Competence en creation de base de données/10" value="${apprenant.bdd}" >
+                      </div>
+                    <!--==================================CHAMP BACKEND==================================-->
+                      <div class="col-sm-12 col-md-6 col-lg-6  mb-5">
+                      <label for="backend" class="form-label">Backend</label>
+                        <input type="number" id="backend" class="form-control" placeholder="Competence en backend/10" value="${apprenant.backend}">
+                      </div>
+                  </div>
+                  <div class="row">
+                    <!--==================================CHAMP BIOGRAPHIE==================================-->
+                      <div class="form-group mb-2">
+                        <label for="bio">Bio de l'apprenant</label>
+                        <textarea class="form-control" id="updateBio" rows="3">${apprenant.bio}</textarea>
+                        <div class="text-end"><span class="text-progress">0</span>/130</div>
+                      </div>
+                      <!--==================================BOUTTON VALIDER==================================-->
+                      <div class="text-end">
+                        <input type="submit" class="btn btn-success" id="updateBtn" value="Enregistrer">
+                        <button class="btn btn-danger" data-bs-dismiss="modal">Abandonner la modification</button>
+                      </div>
+                  </div>
+                 </form>
+          </div>
+      </div>
+  </div>
+</div>
+  </section>
+  `)
+  document.querySelector("form").addEventListener("submit",()=>{
+    updateInDB(apprenant.id)
+  })
+
+  let prenom = document.querySelector("#prenom")
+  let nom = document.querySelector("#nom")
+  let updateBio = document.querySelector("#updateBio")
+  let updateProgressionTextBio = document.querySelector(".text-progress")
+  let updateBtn = document.querySelector("#updateBtn")
+  let niveau = document.querySelector("#niveau")
+  let maquettage= document.querySelector("#maquettage")
+  let backend= document.querySelector("#backend")
+  let bdd= document.querySelector("#bdd")
+  niveau.value = apprenant.niveau
+  updateBio.addEventListener("input", ()=>{
+    controlLength(updateProgressionTextBio,updateBio,updateBtn)
+  })
+}
+function updateInDB(id) {
+  event.preventDefault()
+  let valeurInterface = document.querySelector("#interface")
+  let apprenantModifie ={
+    prenom : prenom.value,
+    nom : nom.value,
+    niveau : niveau.value,
+    bio : updateBio.value,
+    maquettage : maquettage.value,
+    interface : valeurInterface.value,
+    backend : backend.value,
+    bdd : bdd.value
+  }
+  fetch(`${API_URL}?id=eq.${id}`,{
+    method:"PATCH",
+    headers:{
+      apikey:API_KEY,
+      "Content-Type": "application/json",
+      Prefer: "return=representation"
+    },
+    body:JSON.stringify(apprenantModifie)
+  })
+  .then((response)=>{document.location.href=`${id}`})
+}
+function convertToPercentage(valeur,total){
+  return (valeur*100)/total
 }

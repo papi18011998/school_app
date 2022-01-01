@@ -1,4 +1,4 @@
-import { displayForm,findApprenantById,getAllApprenant } from "./ui.js";
+import { displayForm,findAll,findApprenantById} from "./ui.js";
 /**
  * Appelle la fonction correspondante à une URL donnée
  * @param {string} url 
@@ -11,7 +11,7 @@ import { displayForm,findApprenantById,getAllApprenant } from "./ui.js";
         params = url.substring(1)
         findApprenantById(params)
     }else if (params = url.match(/^\/liste$/)) {
-        getAllApprenant()
+        findAll()
     }else{
     displayForm()
     }
