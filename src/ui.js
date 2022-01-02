@@ -454,16 +454,15 @@ function addApprenantInDB(){
             method:"POST",
             headers:{
                 apiKey:API_KEY,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Prefer: "return=representation"
             },
             body:JSON.stringify(apprenant)
         })
+        .then((response)=>{
+          window.location.href = "liste"
+        })
     })
-    // RESET 
-    APPRENANTS.splice(0,APPRENANTS.length)
-    liste.innerHTML= ""
-    saveCollectionContainer.classList.add("d-none")
-    window.location.href = "liste"
 }
 /**
  * Permet d'avoir tous les apprenants

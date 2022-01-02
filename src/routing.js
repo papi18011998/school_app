@@ -6,7 +6,7 @@ import { displayForm,findAll,findApprenantById} from "./ui.js";
  export function applyRouting(url){
     let params;
 
-    // Si l'URL ressemble à /12/details
+    // Si l'URL ressemble à /12
     if (params = url.match(/^\/\d+$/)){
         params = url.substring(1)
         findApprenantById(params)
