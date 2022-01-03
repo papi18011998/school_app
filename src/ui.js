@@ -401,7 +401,6 @@ updateBtn.addEventListener("click",()=>{
           editInputBdd.setAttribute('disabled',true)
           editInputBackend.setAttribute('disabled',true)
           soumissionBtn.style.display="none"
-          console.log("test");
           })
         }
         
@@ -464,7 +463,7 @@ function addApprenantInDB(){
             body:JSON.stringify(apprenant)
         })
         .then((response)=>{
-          window.location.href = "liste"
+          window.location.href = "/liste"
         })
     })
 }
