@@ -82,7 +82,7 @@ export function displayForm(){
          <!--==================================BOUTTON VALIDER==================================-->
          <div class="text-end">
            <input type="submit" class="btn btn-success mb-3" id="ajouter" value="Enregistrer">
-           <!-- <button id="modifier" class="btn btn-success d-none">Modifier</button> -->
+           <a href="/liste" class="btn btn-info mb-3">Liste des apprenant</a>
          </div>
      </div>
     </form>
@@ -189,21 +189,21 @@ function onSubmitForm(e){
         return
     }
     if (isNaN(valeurMaquette) || valeurMaquette < 0 || valeurMaquette >10 || valeurMaquette=="") {
-        valeurMaquette.classList.add("invalid")
+        maquettageInput.classList.add("invalid")
         erreurMaquettage.style.display ="block" 
         return
     }
     if (isNaN(valeurInterface) || valeurInterface < 0 || valeurInterface >10 || valeurInterface=="") {
-        valeurInterface.classList.add("invalid")
+        interfaceInput.classList.add("invalid")
         erreurInterface.style.display ="block" 
         return
     }
     if (isNaN(valeurBdd) || valeurBdd < 0 || valeurBdd >10 || valeurBdd=="") {
-        valeurBdd.classList.add("invalid")
+        bddInput.classList.add("invalid")
         erreurBdd.style.display ="block" 
     }
     if (isNaN(valeurBackend) || valeurBackend < 0 || valeurBackend >10 || valeurBackend=="") {
-        valeurBackend.classList.add("invalid")
+        backendInput.classList.add("invalid")
         erreurBackend.style.display ="block"
         return 
     }
@@ -323,7 +323,7 @@ editInputNiveau.value = apprenant.niveau
 soumissionBtn.style.display="none"
 updateBtn.addEventListener("click",()=>{
     saveCollectionContainer.classList.add("d-none")
-    APPRENANTS.forEach((apprenantItem)=>{
+    APPRENANTS.forEach((apprenantItem,i)=>{
         if (idUpdate.substring(7) == apprenantItem.index) {
             soumissionBtn.style.display="block"
             let editInputPrenom = document.getElementById(idPrenom) 
@@ -388,6 +388,9 @@ updateBtn.addEventListener("click",()=>{
             }
             // AFFECTATION  DU NOUVEL APPRENANT
           apprenantItem = updateApprenant
+          APPRENANTS.splice(i,1)
+          APPRENANTS.push(apprenantItem)
+          console.log(APPRENANTS);
           //  DESACTIVATION CHAMP
           editInputPrenom.setAttribute('disabled',true)
           editInputNom.setAttribute('disabled',true)
@@ -398,6 +401,7 @@ updateBtn.addEventListener("click",()=>{
           editInputBdd.setAttribute('disabled',true)
           editInputBackend.setAttribute('disabled',true)
           soumissionBtn.style.display="none"
+          console.log("test");
           })
         }
         
@@ -539,6 +543,7 @@ function detailsOfApprenant(apprenant) {
   </section>
   <section class="col-sm-12 col-md-6 col-lg-6 ps-5 pe-5" id="liste-apprenant">
   <div class="h3">${apprenant.prenom} ${apprenant.nom}</div>
+  <div class="text-muted">${apprenant.niveau}</div>
   <div>${apprenant.bio}</div>
   <label for="file" class="mt-3">Compétence en maquettage: ${poucentageMaquette}%</label>
   <progress id="file" value="${poucentageMaquette}" max="100" class="w-100"></progress>
